@@ -51,6 +51,7 @@ class HashTable:
         # Your code here
 
 
+
     def fnv1(self, key):
         """
         FNV-1 Hash, 64-bit
@@ -59,8 +60,16 @@ class HashTable:
         """
 
         # Your code here
-        string_bytes = key.encode()
 
+    def custom_hash(self, key):
+        """
+        FNV-1 Hash, 64-bit
+
+        Implement this, and/or DJB2.
+        """
+
+        # Your code here
+        string_bytes = key.encode()
         total = 0
 
         for b in string_bytes:
@@ -75,6 +84,11 @@ class HashTable:
         Implement this, and/or FNV-1.
         """
         # Your code here
+        hash = 5381
+        for x in key:
+            hash = (( hash << 5) + hash) + ord(x)
+        return hash & 0xFFFFFFFF
+
 
 
     def hash_index(self, key):
@@ -82,7 +96,7 @@ class HashTable:
         Take an arbitrary key and return a valid integer index
         between within the storage capacity of the hash table.
         """
-        return self.fnv1(key) % self.get_num_slots()
+        return self.djb2(key) % self.get_num_slots()
         # return self.djb2(key) % self.capacity
 
     def put(self, key, value):
@@ -170,19 +184,10 @@ if __name__ == "__main__":
 
     print("\nMy Logs:\n")
     print(ht.get_num_slots())
-    print(ht.fnv1('shawn'))
+    print('custom_hash', ht.custom_hash('shawn'))
+    print('djb2', ht.djb2('shawn'))
     print(ht.hash_index('shawn'))
     print(ht.capacity)
     ht.put('Country','voight')
     ht.put('shawn','Tompke')
-    # ht.put("key-0", "val-0")
-    # ht.put("key-1", "val-1")
-    # ht.put("key-2", "val-2")
-    # ht.put("key-3", "val-3")
-    # ht.put("key-4", "val-4")
-    # ht.put("key-5", "val-5")
-    # ht.put("key-6", "val-6")
-    # ht.put("key-7", "val-7")
-    # ht.put("key-8", "val-8")
-    # ht.put("key-9", "val-9")
     print(ht.capacity)
