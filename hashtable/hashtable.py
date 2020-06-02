@@ -170,7 +170,25 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        self.put(key, None)
+        slot = self.hash_index(key)
+        cur = self.capacity[slot]
+
+        # if that slot is not empty
+        if cur:
+            # if head ( first one ) is the desired node
+            if cur.key == key:
+                deleted = cur
+                self.capacity[slot] = cur.next
+                return deleted
+            else:
+                while cur.next is not None:
+                    if cur.next.key == key:
+                        deleted = cur.next
+                        cur.next = cur.next.next
+                        return deleted
+                    cur = cur.next
+                return 'nothing by that key to delete'
+        return 'slot is empty'
 
     def get(self, key):
         """
@@ -240,7 +258,14 @@ if __name__ == "__main__":
     ht.put('shawn','Tompke')
     ht.put('bar','bar_value')
     ht.put('baz','baz_value' ) # overwrites bar
-    print(ht.capacity[2].next)
-    print(HashTableEntry('shawn','tompke'))
-    # print(ht.capacity[1])
-    print(ht.get('baz'))
+    ht.put('bal','bal_value')
+
+
+    # ht.delete('Country')
+    print(ht.delete('baz'))
+    print(ht.delete('baz'))
+    print(ht.delete('bar'))
+    print(ht.delete('bar'))
+
+
+    print(ht.capacity)
