@@ -201,14 +201,16 @@ class HashTable:
         # Your code here
         slot = self.hash_index(key)
         cur = self.capacity[slot]
-        if cur.key == key:
-            return self.capacity[slot]
-        else:
-            while cur is not None:
-                if cur.key == key:
-                    return cur
-                cur = cur.next
-            return None
+        # if that slot is not empty
+        if cur:
+            if cur.key == key:
+                return self.capacity[slot].value
+            else:
+                while cur is not None:
+                    if cur.key == key:
+                        return cur.value
+                    cur = cur.next
+                return None
 
     def resize(self, new_capacity):
         """
