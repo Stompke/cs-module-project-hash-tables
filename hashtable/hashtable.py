@@ -1,3 +1,47 @@
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+class LinkedList:
+    def __init__(self):
+        self.head = None
+    
+    def insert_at_head(self, node):
+        node.next = self.head
+        self.head = node
+
+    def find(self, value):
+        cur = self.head
+
+        while cur is not None:
+            if cur.value == value:
+                return cur
+            cur = cur.next
+        # If nothing found
+        return None
+    
+    def delete(self, value):
+        cur = self.head
+        # Special case of deleting the head of list
+        if cur.value == value:
+            self.head = cur.next
+            return cur
+        
+        while cur.next is not None:
+            if cur.next.value == value:
+                deleted = cur.next
+                cur.next = cur.next.next
+                return deleted
+            cur = cur.next
+
+        
+
+if __name__ == "__main__":
+     ll = LinkedList()
+     ll.insert_at_head(Node(11))
+
+
 class HashTableEntry:
     """
     Linked List hash table key/value pair
@@ -27,7 +71,6 @@ class HashTable:
         # Your code here
         self.capacity = [None] * capacity
 
-
     def get_num_slots(self):
         """
         Return the length of the list you're using to hold the hash
@@ -41,7 +84,6 @@ class HashTable:
         # Your code here
         return len(self.capacity)
 
-
     def get_load_factor(self):
         """
         Return the load factor for this hash table.
@@ -49,8 +91,6 @@ class HashTable:
         Implement this.
         """
         # Your code here
-
-
 
     def fnv1(self, key):
         """
@@ -76,7 +116,6 @@ class HashTable:
             total += b
         return total
 
-
     def djb2(self, key):
         """
         DJB2 hash, 32-bit
@@ -88,8 +127,6 @@ class HashTable:
         for x in key:
             hash = (( hash << 5) + hash) + ord(x)
         return hash & 0xFFFFFFFF
-
-
 
     def hash_index(self, key):
         """
@@ -108,8 +145,19 @@ class HashTable:
         Implement this.
         """
         # Your code here
+
+        
         slot = self.hash_index(key)
-        self.capacity[slot] = value
+        new_entry = HashTableEntry(key, value)
+        # if empty
+        if self.capacity[slot] is None:
+            # insert
+            self.capacity[slot] = new_entry
+        # if not empty
+        else:
+            # insert at tail
+            self.capacity[slot].next = new_entry
+
 
 
     def delete(self, key):
@@ -123,8 +171,6 @@ class HashTable:
         # Your code here
         self.put(key, None)
 
-
-
     def get(self, key):
         """
         Retrieve the value stored with the given key.
@@ -135,8 +181,15 @@ class HashTable:
         """
         # Your code here
         slot = self.hash_index(key)
-        return self.capacity[slot]
-
+        cur = self.capacity[slot]
+        if cur.key == key:
+            return self.capacity[slot]
+        else:
+            while cur is not None:
+                if cur.key == key:
+                    return cur
+                cur = cur.next
+            return None
 
     def resize(self, new_capacity):
         """
@@ -146,7 +199,6 @@ class HashTable:
         Implement this.
         """
         # Your code here
-
 
 
 if __name__ == "__main__":
@@ -183,11 +235,11 @@ if __name__ == "__main__":
     #     print(ht.get(f"line_{i}"))
 
     print("\nMy Logs:\n")
-    print(ht.get_num_slots())
-    print('custom_hash', ht.custom_hash('shawn'))
-    print('djb2', ht.djb2('shawn'))
-    print(ht.hash_index('shawn'))
-    print(ht.capacity)
     ht.put('Country','voight')
     ht.put('shawn','Tompke')
+    ht.put('bar','bar_value')
+    ht.put('baz','baz_value' ) # overwrites bar
     print(ht.capacity)
+    print(HashTableEntry('shawn','tompke'))
+    # print(ht.capacity[1])
+    print(ht.get('baz'))
