@@ -155,8 +155,9 @@ class HashTable:
             self.capacity[slot] = new_entry
         # if not empty
         else:
-            # insert at tail
-            self.capacity[slot].next = new_entry
+            # insert at head
+            new_entry.next = self.capacity[slot]
+            self.capacity[slot] = new_entry
 
 
 
@@ -239,7 +240,7 @@ if __name__ == "__main__":
     ht.put('shawn','Tompke')
     ht.put('bar','bar_value')
     ht.put('baz','baz_value' ) # overwrites bar
-    print(ht.capacity)
+    print(ht.capacity[2].next)
     print(HashTableEntry('shawn','tompke'))
     # print(ht.capacity[1])
     print(ht.get('baz'))
