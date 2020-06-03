@@ -160,8 +160,6 @@ class HashTable:
             new_entry.next = self.capacity[slot]
             self.capacity[slot] = new_entry
 
-
-
     def delete(self, key):
         """
         Remove the value stored with the given key.
@@ -224,7 +222,7 @@ class HashTable:
         """
         # Your code here
         old_cap = self.capacity
-
+        self.capacity = [None] * new_capacity
 
 if __name__ == "__main__":
     ht = HashTable(8)
@@ -276,3 +274,6 @@ if __name__ == "__main__":
 
     print(ht.capacity)
     print(ht.num_stored)
+    print(len(ht.capacity))
+    print(ht.resize(16))
+    print(len(ht.capacity))
