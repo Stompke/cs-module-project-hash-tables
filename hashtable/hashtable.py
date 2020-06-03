@@ -70,6 +70,7 @@ class HashTable:
     def __init__(self, capacity):
         # Your code here
         self.capacity = [None] * capacity
+        self.num_stored = 0
 
     def get_num_slots(self):
         """
@@ -145,7 +146,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
-
+        self.num_stored += 1
         
         slot = self.hash_index(key)
         new_entry = HashTableEntry(key, value)
@@ -179,12 +180,14 @@ class HashTable:
             if cur.key == key:
                 deleted = cur
                 self.capacity[slot] = cur.next
+                self.num_stored -= 1
                 return deleted
             else:
                 while cur.next is not None:
                     if cur.next.key == key:
                         deleted = cur.next
                         cur.next = cur.next.next
+                        self.num_stored -= 1
                         return deleted
                     cur = cur.next
                 return 'nothing by that key to delete'
@@ -220,6 +223,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        old_cap = self.capacity
 
 
 if __name__ == "__main__":
@@ -271,3 +275,4 @@ if __name__ == "__main__":
 
 
     print(ht.capacity)
+    print(ht.num_stored)
