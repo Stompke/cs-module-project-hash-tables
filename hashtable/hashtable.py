@@ -92,7 +92,8 @@ class HashTable:
         Implement this.
         """
         # Your code here
-
+        load_factor = self.num_stored / self.get_num_slots()
+        return load_factor
     def fnv1(self, key):
         """
         FNV-1 Hash, 64-bit
@@ -150,15 +151,42 @@ class HashTable:
         
         slot = self.hash_index(key)
         new_entry = HashTableEntry(key, value)
+
+
         # if empty
         if self.capacity[slot] is None:
             # insert
             self.capacity[slot] = new_entry
+            if self.get_load_factor() > .7:
+                print(self.get_load_factor())
+                self.resize(len(self.capacity) * 2)
         # if not empty
         else:
-            # insert at head
+            # check if its in the table then overwrite
+            cur = self.capacity[slot]
+            # if that slot is not empty
+            if cur:
+                if cur.key == key:
+                    self.capacity[slot] = new_entry
+                    if self.get_load_factor() > .7:
+                        print(self.get_load_factor())
+                        self.resize(len(self.capacity) * 2)
+                else:
+                    while cur is not None:
+                        if cur.key == key:
+                            self.capacity[slot] = new_entry
+                            if self.get_load_factor() > .7:
+                                print(self.get_load_factor())
+                                self.resize(len(self.capacity) * 2)
+                                cur = cur.next
+                    return None
+            
+            # or insert at head
             new_entry.next = self.capacity[slot]
             self.capacity[slot] = new_entry
+            if self.get_load_factor() > .7:
+                print(self.get_load_factor())
+                self.resize(len(self.capacity) * 2)
 
     def delete(self, key):
         """
@@ -220,9 +248,18 @@ class HashTable:
 
         Implement this.
         """
+        print('RESIZING!!!')
         # Your code here
         old_cap = self.capacity
         self.capacity = [None] * new_capacity
+
+        for x in old_cap:
+            cur = x
+            while cur is not None:
+                # print(cur)
+                self.put(cur.key, cur.value)
+                cur = cur.next
+        print('new capacity', len(self.capacity))
 
 if __name__ == "__main__":
     ht = HashTable(8)
@@ -264,16 +301,22 @@ if __name__ == "__main__":
     ht.put('baz','baz_value' ) # overwrites bar
     ht.put('bal','bal_value')
 
+    ht.put('george','george_value')
+    ht.put('tim','tim_value')
 
     # ht.delete('Country')
-    print(ht.delete('baz'))
-    print(ht.delete('baz'))
-    print(ht.delete('bar'))
-    print(ht.delete('bar'))
+    # print(ht.delete('baz'))
+    # print(ht.delete('baz'))
+    # print(ht.delete('bar'))
+    # print(ht.delete('bar'))
 
 
+    # print(ht.capacity)
+    # print(ht.num_stored)
+    # print(len(ht.capacity))
+    # print(ht.resize(16))
+    # print(len(ht.capacity))
+    print(ht.get_load_factor())
+    print(len(ht.capacity))
     print(ht.capacity)
-    print(ht.num_stored)
-    print(len(ht.capacity))
-    print(ht.resize(16))
-    print(len(ht.capacity))
+    print(ht.get(''))
